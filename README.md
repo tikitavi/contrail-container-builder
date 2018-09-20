@@ -1,10 +1,11 @@
 # Contrail containers based on microservices
 
-This is an beta version of Contrail containers based on microservices.
+This is a version of Contrail containers based on microservices.
 Checked on:
   - Kubernetes with CNI
   - Docker compose (via contrail-ansible-deployer)
   - OpenStack Helm
+
 Works with limitations and known issues.
 Everything is tested in CentOS 7.4 / Ubuntu 16.04 for deployment to run on one/three machines.
 
@@ -62,10 +63,6 @@ You can use ```apply.sh``` and ```delete.sh``` helper scripts from ```kubernetes
 
 * Configure ```common.env``` PHYSICAL_INTERFACE, VROUTER_GATEWAY and KUBERNETES_NODES_MAP parameters before Contrail deployment.
 
-## Provisioning Contrail in Helm OpenStack
-
-Please refer to the README-HELM.md
-
 ## Known issues
 
 * "No route to host" or cannot access mirrors.centos.org errors during container build
@@ -81,53 +78,3 @@ Please refer to the README-HELM.md
   - The reason: Supposed race condition during start-up with Contrail DB. Will be fixed later
   - To fix: manually restart all contrail-* and kube-manager containers. Probably by restart their pods (haven't tried yet).    Restarting can be done by:
 ```docker ps | grep contrail | awk '{print($1)}' | xargs docker restart```~~
-
-## TODOs
-
-1. Refactoring - base and common split to specific modules
-2. ~~NodeManager - eliminate all, leave just one~~
-3. ~~Neutron, nova, heat - revisit pluginization mechanism~~
-4. ~~Kubeagent - create new one~~
-5. All scripts - move to root dir
-6. ~~Source rpm repo in setup, add parameter to take from non-S3~~
-7. ~~Rename contrail-micro.yaml to contrail-micro.yaml.sample~~
-8. ~~Create README~~
-9. ~~Remove firewall during setup~~
-10. Deal with “cannot allocate memory” during kernel module loading
-11. ~~**Complete vrouter container - add DPDK, VLAN, etc.**~~
-12. ~~Create initContainer for vrouter compilation~~
-13. Split charts to Contrail-only and the rest
-14. Remove all notions about OpenStack/Keystone/Kubernetes from Contrail containers and add separate containers (sidecars) bringing orchestrator-related functionality.
-15. ~~Kernel module compilation for Ubuntu~~
-16. Nested cni.conf (if needed)
-17. ~~/var/crashes folder should be created~~
-18. ~~Unnecessary packages should be removed from containers~~
-19. ~~Make DEBUG logging configurable~~
-20. ~~**Multi-node deployment**~~
-21. ~~**Cluster-deployment for Contrail, Cassandra, etc**~~
-22. Rework Helm charts to reuse third-party charts instead of built-in sections
-23. ~~Add yum clean at the end of containers~~
-24. ~~Rename kubernetes/kube-agent to kubernetes/vrouter-init~~
-25. ~~Move kube-manager to kubernetes folder~~
-26. ~~Add synchronization for containers (supposedly Cassandra and Zookeeper for controller should be run before contrail containers)~~
-27. ~~Remove contrail-config section from yaml and remove all its remaining usages~~
-28. Add comments to each entrypoint.sh for interface ENV variables
-29. ~~Rework configuration passing in charts~~
-30. ~~Improve provisioning scripts to work with existing docker repo and other features~~
-31. Nodemgr - rework to use single conf and no env variables (everything is taken from conf)
-32. Nodemgr - fix known bugs
-33. ~~Nodemgr - package correctly into rpm, now docker takes it by git clone~~
-34. Optimize size
-35. Make CNI plugin log level configurable.
-36. ~~Sort out with multiple NIC configiration - probably provision link local is needed since it set ip_fabric_ip.~~
-37. Consider to use K8S services to provide VIPs for Config, Analytics and WebUI.
-38. Split common.env to separate build.env and deployment.env
-39. Add switching off dhcp on phys_int after inserting vhost0
-40. Standardize configuration variables across all components in the system.
-41. ~~Add provision-alarm.py (https://bugs.launchpad.net/juniperopenstack/+bug/1736279)~~
-42. ~~Avoid changing /etc/hosts file (rabbitmq).~~
-43. ~~vrouter agent entrypoint: add ability to configure metadata_proxy_secret=contrail in [METADATA]~~
-44. ~~Sort out with KUBERNETES_public_fip_pool~~
-45. ~~Ubuntu containers~~
-46. ~~Introduce base container for agent and move agent specific functions to it~~
-47. ~~Remove net-watchdog contrail as the problem with vhost0 rest by agent be solved (dpdk case)~~
